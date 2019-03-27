@@ -1,7 +1,9 @@
 import React, { Component} from 'react';
 import {Platform, StyleSheet, Text, View, TextInput, Button} from 'react-native';
-import PlacesList from './src/components/PlacesList'
-import PlaceInput from './src/components/PlaceInput'
+import PlacesList from './src/components/PlacesList';
+import PlaceInput from './src/components/PlaceInput';
+import placeImage  from './src/assets/LadyWithAFan.jpg';
+import PlaceDetail from './src/components/PlaceDetail';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -13,20 +15,59 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
   state = { 
-    places: []
+    places: [],
+    selectedPlace: null
   }
   placeAddedHandler = placeName => {
     this.setState(prevState => {
       return {
-        places: prevState.places.concat(placeName)
+        places: prevState.places.concat({
+          key: `${Math.random()}`,
+          name: placeName,
+          image: placeImage
+        })
       }
     })
   };
+
+  placeSelectedHandler = (key) => {
+    this.setState(prevState => {
+      return {
+        selectedPlace: prevState.places.find(place => {
+          return place.key === key;
+        })
+      };
+    });
+  }
+
+  placeDeletedHandler = () => {
+    this.setState(prevState => {
+      return{
+        places: prevState.places.filter(place =>{
+          return place.key !== prevState.selectedPlace.key;
+        }),
+        selectedPlace: null
+      }
+    })
+  };
+
+  modalClosedHandler = () => {
+    this.setState({
+      selectedPlace: null
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
+      <PlaceDetail 
+        selectedPlace={this.state.selectedPlace} 
+        onItemDeleted={this.placeDeletedHandler}
+        onModalClosed={this.modalClosedHandler}/>
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />
-        <PlacesList places={this.state.places} />
+        <PlacesList 
+          places={this.state.places}
+          onItemSelected={this.placeSelectedHandler} />
       </View>
     );
   }
