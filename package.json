@@ -1,5 +1,5 @@
 {
-  "name": "Vintages",
+  "name": "vintages",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "react": "16.8.3",
-    "react-native": "0.59.1"
+    "react-native": "^0.59.2",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
